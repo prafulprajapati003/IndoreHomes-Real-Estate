@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact IndoreHomes | Real Estate in Indore</title>
+    <meta name="description" content="Contact IndoreHomes for all your real estate needs in Indore. Visit our office, call us, or fill out the contact form. We're here to help you find your dream property.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-logo">
+                    <i class="fas fa-home"></i>
+                    <span>IndoreHomes</span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="buy.html" class="nav-link">Buy</a>
+                    <a href="rent.html" class="nav-link">Rent</a>
+                    <a href="sell.html" class="nav-link">Sell</a>
+                    <a href="projects.html" class="nav-link">Projects</a>
+                    <a href="contact.html" class="nav-link active">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn-login">Login</button>
+                    <button class="btn-primary">Post Property</button>
+                    <div class="nav-toggle" id="navToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Contact Us</h1>
+                <p>Get in touch with IndoreHomes for all your real estate needs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="contact-info">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>+91 98765 43210</p>
+                    <p>+91 87654 32109</p>
+                    <span class="contact-subtitle">Mon-Sat: 9:00 AM - 7:00 PM</span>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p>info@indorehomes.com</p>
+                    <p>support@indorehomes.com</p>
+                    <span class="contact-subtitle">We respond within 24 hours</span>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Us</h3>
+                    <p>123, AB Road, Vijay Nagar</p>
+                    <p>Indore, Madhya Pradesh 452010</p>
+                    <span class="contact-subtitle">Office Hours: 9:00 AM - 7:00 PM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="contact-form-wrapper">
+                <div class="form-content">
+                    <h2 class="section-title">Get in Touch</h2>
+                    <p class="section-subtitle">Fill out the form below and we'll get back to you soon</p>
+                    
+                    <form class="contact-form" id="mainContactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="buy-property">Buy Property</option>
+                                <option value="sell-property">Sell Property</option>
+                                <option value="rent-property">Rent Property</option>
+                                <option value="general-inquiry">General Inquiry</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="partnership">Partnership</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell us how we can help you..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="preferredContact">Preferred Contact Method</label>
+                            <select id="preferredContact" name="preferredContact">
+                                <option value="phone">Phone Call</option>
+                                <option value="email">Email</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="any">Any Method</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bestTime">Best Time to Contact</label>
+                            <select id="bestTime" name="bestTime">
+                                <option value="morning">Morning (9 AM - 12 PM)</option>
+                                <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                                <option value="evening">Evening (4 PM - 7 PM)</option>
+                                <option value="anytime">Anytime</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <label for="newsletter">Subscribe to our newsletter for property updates and exclusive offers</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Send Message</button>
+                            <button type="button" class="btn-secondary" onclick="resetContactForm()">Reset Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Contact Forms -->
+    <section class="quick-contact">
+        <div class="container">
+            <h2 class="section-title">Quick Contact</h2>
+            <p class="section-subtitle">Get specific help for your needs</p>
+            
+            <div class="quick-contact-grid">
+                <div class="quick-contact-card">
+                    <div class="quick-contact-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Property Valuation</h3>
+                    <p>Get a free valuation for your property</p>
+                    <form class="quick-form" id="valuationForm">
+                        <input type="text" placeholder="Property Location" required>
+                        <input type="text" placeholder="Property Type">
+                        <button type="submit" class="btn-primary">Get Valuation</button>
+                    </form>
+                </div>
+                
+                <div class="quick-contact-card">
+                    <div class="quick-contact-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Property Search</h3>
+                    <p>Let us find the perfect property for you</p>
+                    <form class="quick-form" id="searchForm">
+                        <input type="text" placeholder="Your Requirements" required>
+                        <input type="text" placeholder="Budget Range">
+                        <button type="submit" class="btn-primary">Start Search</button>
+                    </form>
+                </div>
+                
+                <div class="quick-contact-card">
+                    <div class="quick-contact-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Schedule Visit</h3>
+                    <p>Book a property visit at your convenience</p>
+                    <form class="quick-form" id="visitForm">
+                        <input type="text" placeholder="Property ID/Name" required>
+                        <input type="datetime-local" placeholder="Preferred Date & Time" required>
+                        <button type="submit" class="btn-primary">Schedule Visit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <h2 class="section-title">Find Us</h2>
+            <p class="section-subtitle">Visit our office in Vijay Nagar, Indore</p>
+            
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Interactive Map</h3>
+                    <p>123, AB Road, Vijay Nagar, Indore, MP 452010</p>
+                    <button class="btn-primary" onclick="openGoogleMaps()">Open in Google Maps</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Our Team</h2>
+            <p class="section-subtitle">Meet our experienced real estate professionals</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=150&q=80" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3>Rahul Sharma</h3>
+                        <p class="member-position">Managing Director</p>
+                        <p class="member-experience">15+ Years Experience</p>
+                        <div class="member-contact">
+                            <span><i class="fas fa-phone"></i> +91 98765 43210</span>
+                            <span><i class="fas fa-envelope"></i> rahul@indorehomes.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b332c1ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=150&q=80" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3>Priya Patel</h3>
+                        <p class="member-position">Senior Property Consultant</p>
+                        <p class="member-experience">10+ Years Experience</p>
+                        <div class="member-contact">
+                            <span><i class="fas fa-phone"></i> +91 87654 32109</span>
+                            <span><i class="fas fa-envelope"></i> priya@indorehomes.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=150&q=80" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3>Amit Verma</h3>
+                        <p class="member-position">Property Advisor</p>
+                        <p class="member-experience">8+ Years Experience</p>
+                        <div class="member-contact">
+                            <span><i class="fas fa-phone"></i> +91 76543 21098</span>
+                            <span><i class="fas fa-envelope"></i> amit@indorehomes.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Common questions about our services</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How do I list my property on IndoreHomes?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Listing your property is simple! Visit our "Sell" page, fill out the property details form, upload photos, and submit. Our team will review and activate your listing within 24 hours. You can also call us directly for assistance.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Are there any charges for listing properties?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Basic property listings are completely free! We only charge a small commission when your property is successfully sold through our platform. Premium listing options with enhanced visibility are available at nominal charges.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How do you verify property listings?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our team conducts thorough verification of all property listings. We verify ownership documents, visit the property, and ensure all information provided is accurate. Only verified properties receive the "Verified" badge on our platform.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Can I schedule a property visit online?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! You can schedule property visits through our website, mobile app, or by calling our office. Simply select the property, choose your preferred date and time, and we'll coordinate with the property owner to confirm the visit.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>What areas do you cover in Indore?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We cover all major localities in Indore including Vijay Nagar, Super Corridor, Rau, Nipania, Palasia, Bhawarkuan, Bengali Square, AB Road, Scheme 140, MR 10, and more. Our network extends to both residential and commercial properties across the city.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <span id="successText">Message sent successfully!</span>
+    </div>
+
+    <script src="contact-script.js"></script>
+</body>
+</html>

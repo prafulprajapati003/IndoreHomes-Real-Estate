@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Projects in Indore | IndoreHomes - Premium Real Estate</title>
+    <meta name="description" content="Explore new and upcoming real estate projects in Indore. Premium residential and commercial projects by reputed builders with RERA registration.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-logo">
+                    <i class="fas fa-home"></i>
+                    <span>IndoreHomes</span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="buy.html" class="nav-link">Buy</a>
+                    <a href="rent.html" class="nav-link">Rent</a>
+                    <a href="sell.html" class="nav-link">Sell</a>
+                    <a href="projects.html" class="nav-link active">Projects</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn-login">Login</button>
+                    <button class="btn-primary">Post Property</button>
+                    <div class="nav-toggle" id="navToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>New Projects in Indore</h1>
+                <p>Explore premium new and upcoming real estate projects by reputed builders</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Filters -->
+    <section class="project-filters">
+        <div class="container">
+            <div class="filter-container">
+                <h2>Find Your Dream Project</h2>
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <select id="projectLocationFilter">
+                            <option value="">All Locations</option>
+                            <option value="vijay-nagar">Vijay Nagar</option>
+                            <option value="super-corridor">Super Corridor</option>
+                            <option value="rau">Rau</option>
+                            <option value="nipania">Nipania</option>
+                            <option value="palasia">Palasia</option>
+                            <option value="bhawarkuan">Bhawarkuan</option>
+                            <option value="bengali-square">Bengali Square</option>
+                            <option value="ab-road">AB Road</option>
+                            <option value="scheme-140">Scheme 140</option>
+                            <option value="mr-10">MR 10</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Project Type</label>
+                        <select id="projectTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="residential">Residential</option>
+                            <option value="commercial">Commercial</option>
+                            <option value="mixed">Mixed Use</option>
+                            <option value="township">Township</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Property Type</label>
+                        <select id="propertyTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="apartment">Apartments</option>
+                            <option value="villa">Villas</option>
+                            <option value="plot">Plots</option>
+                            <option value="office">Office Spaces</option>
+                            <option value="retail">Retail Spaces</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="projectStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="under-construction">Under Construction</option>
+                            <option value="pre-launch">Pre-Launch</option>
+                            <option value="ready-to-move">Ready to Move</option>
+                            <option value="upcoming">Upcoming</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="btn-primary" onclick="applyProjectFilters()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn-secondary" onclick="resetProjectFilters()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects -->
+    <section class="featured-projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">Handpicked premium projects by top builders</p>
+            
+            <div class="projects-grid" id="featuredProjectsGrid">
+                <!-- Projects will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All Projects -->
+    <section class="all-projects">
+        <div class="container">
+            <h2 class="section-title">All Projects</h2>
+            <div class="projects-list" id="allProjectsList">
+                <!-- Projects will be populated by JavaScript -->
+            </div>
+            
+            <div class="load-more-container">
+                <button class="btn-load-more" onclick="loadMoreProjects()">Load More Projects</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Projects -->
+    <section class="upcoming-projects">
+        <div class="container">
+            <h2 class="section-title">Upcoming Projects</h2>
+            <p class="section-subtitle">Be the first to know about new launches</p>
+            
+            <div class="upcoming-grid" id="upcomingGrid">
+                <!-- Upcoming projects will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Builder Spotlight -->
+    <section class="builder-spotlight">
+        <div class="container">
+            <h2 class="section-title">Top Builders in Indore</h2>
+            <p class="section-subtitle">Trusted builders with proven track record</p>
+            
+            <div class="builders-grid" id="buildersGrid">
+                <!-- Builders will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Comparison -->
+    <section class="project-comparison">
+        <div class="container">
+            <h2 class="section-title">Compare Projects</h2>
+            <p class="section-subtitle">Compare multiple projects side by side</p>
+            
+            <div class="comparison-container">
+                <div class="comparison-header">
+                    <div class="add-project-btn" onclick="addProjectToCompare()">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Project</span>
+                    </div>
+                    <div class="comparison-slots" id="comparisonSlots">
+                        <div class="comparison-slot empty" onclick="selectProjectForCompare(1)">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Select Project</span>
+                        </div>
+                        <div class="comparison-slot empty" onclick="selectProjectForCompare(2)">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Select Project</span>
+                        </div>
+                        <div class="comparison-slot empty" onclick="selectProjectForCompare(3)">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Select Project</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-table" id="comparisonTable" style="display: none;">
+                    <!-- Comparison table will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeProjectModal()">&times;</span>
+            <div id="projectModalBody">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Selection Modal -->
+    <div class="modal" id="projectSelectionModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeProjectSelectionModal()">&times;</span>
+            <div class="project-selection-content">
+                <h2>Select Project to Compare</h2>
+                <div class="project-selection-list" id="projectSelectionList">
+                    <!-- Projects list will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <span id="successText">Message sent successfully!</span>
+    </div>
+
+    <script src="projects-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Property in Indore | IndoreHomes - Premium Real Estate</title>
+    <meta name="description" content="Sell your property in Indore with IndoreHomes. Post your property for free and reach thousands of potential buyers. Get best price for your property.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-logo">
+                    <i class="fas fa-home"></i>
+                    <span>IndoreHomes</span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="buy.html" class="nav-link">Buy</a>
+                    <a href="rent.html" class="nav-link">Rent</a>
+                    <a href="sell.html" class="nav-link active">Sell</a>
+                    <a href="projects.html" class="nav-link">Projects</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn-login">Login</button>
+                    <button class="btn-primary">Post Property</button>
+                    <div class="nav-toggle" id="navToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Sell Your Property in Indore</h1>
+                <p>Post your property and reach thousands of potential buyers. Get the best price for your property.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell Options -->
+    <section class="sell-options">
+        <div class="container">
+            <h2 class="section-title">How would you like to sell?</h2>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectSellOption('owner')">
+                    <div class="option-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Sell as Owner</h3>
+                    <p>List your property directly and connect with buyers</p>
+                    <ul class="option-features">
+                        <li><i class="fas fa-check"></i> Free listing</li>
+                        <li><i class="fas fa-check"></i> Direct buyer contact</li>
+                        <li><i class="fas fa-check"></i> No commission</li>
+                    </ul>
+                    <button class="btn-primary">Start Selling</button>
+                </div>
+                
+                <div class="option-card" onclick="selectSellOption('agent')">
+                    <div class="option-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Sell with Agent</h3>
+                    <p>Get professional help from our verified agents</p>
+                    <ul class="option-features">
+                        <li><i class="fas fa-check"></i> Expert guidance</li>
+                        <li><i class="fas fa-check"></i> Better pricing</li>
+                        <li><i class="fas fa-check"></i> Faster sale</li>
+                    </ul>
+                    <button class="btn-primary">Find Agent</button>
+                </div>
+                
+                <div class="option-card" onclick="selectSellOption('instant')">
+                    <div class="option-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Instant Sale</h3>
+                    <p>Sell your property instantly to verified buyers</p>
+                    <ul class="option-features">
+                        <li><i class="fas fa-check"></i> Quick payment</li>
+                        <li><i class="fas fa-check"></i> Hassle-free</li>
+                        <li><i class="fas fa-check"></i> Guaranteed sale</li>
+                    </ul>
+                    <button class="btn-primary">Get Offer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Property Listing Form -->
+    <section class="listing-form" id="listingForm" style="display: none;">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title">Post Your Property</h2>
+                <p class="form-subtitle">Fill in the details to list your property</p>
+                
+                <form class="sell-property-form" id="sellPropertyForm">
+                    <!-- Property Type Selection -->
+                    <div class="form-section">
+                        <h3>Property Type</h3>
+                        <div class="property-type-grid">
+                            <div class="type-option">
+                                <input type="radio" id="residential" name="propertyCategory" value="residential" checked>
+                                <label for="residential">
+                                    <i class="fas fa-home"></i>
+                                    Residential
+                                </label>
+                            </div>
+                            <div class="type-option">
+                                <input type="radio" id="commercial" name="propertyCategory" value="commercial">
+                                <label for="commercial">
+                                    <i class="fas fa-store"></i>
+                                    Commercial
+                                </label>
+                            </div>
+                            <div class="type-option">
+                                <input type="radio" id="plot" name="propertyCategory" value="plot">
+                                <label for="plot">
+                                    <i class="fas fa-th"></i>
+                                    Plot/Land
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Basic Details -->
+                    <div class="form-section">
+                        <h3>Basic Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="propertyType">Property Type *</label>
+                                <select id="propertyType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="flat">Flat/Apartment</option>
+                                    <option value="villa">Independent House/Villa</option>
+                                    <option value="pg">PG/Co-living</option>
+                                    <option value="office">Office Space</option>
+                                    <option value="shop">Shop/Showroom</option>
+                                    <option value="warehouse">Warehouse/Godown</option>
+                                    <option value="land">Land/Plot</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="listingType">Listing Type *</label>
+                                <select id="listingType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="sale">For Sale</option>
+                                    <option value="rent">For Rent</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyTitle">Property Title *</label>
+                            <input type="text" id="propertyTitle" placeholder="e.g., Spacious 3BHK in Vijay Nagar" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyDescription">Description *</label>
+                            <textarea id="propertyDescription" rows="4" placeholder="Describe your property in detail..." required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Location Details -->
+                    <div class="form-section">
+                        <h3>Location Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="locality">Locality *</label>
+                                <select id="locality" required>
+                                    <option value="">Select Locality</option>
+                                    <option value="vijay-nagar">Vijay Nagar</option>
+                                    <option value="super-corridor">Super Corridor</option>
+                                    <option value="rau">Rau</option>
+                                    <option value="nipania">Nipania</option>
+                                    <option value="palasia">Palasia</option>
+                                    <option value="bhawarkuan">Bhawarkuan</option>
+                                    <option value="bengali-square">Bengali Square</option>
+                                    <option value="ab-road">AB Road</option>
+                                    <option value="scheme-140">Scheme 140</option>
+                                    <option value="mr-10">MR 10</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Complete Address *</label>
+                                <input type="text" id="address" placeholder="Building name, street, landmark..." required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" value="Indore" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode *</label>
+                                <input type="text" id="pincode" placeholder="e.g., 452010" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Details -->
+                    <div class="form-section">
+                        <h3>Property Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bedrooms">Bedrooms</label>
+                                <select id="bedrooms">
+                                    <option value="">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="5+">5+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bathrooms">Bathrooms</label>
+                                <select id="bathrooms">
+                                    <option value="">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="5+">5+</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="area">Area (sq ft) *</label>
+                                <input type="number" id="area" placeholder="e.g., 1200" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="furnishing">Furnishing</label>
+                                <select id="furnishing">
+                                    <option value="">Select</option>
+                                    <option value="unfurnished">Unfurnished</option>
+                                    <option value="semi-furnished">Semi-Furnished</option>
+                                    <option value="fully-furnished">Fully Furnished</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="totalFloors">Total Floors</label>
+                                <input type="number" id="totalFloors" placeholder="e.g., 10">
+                            </div>
+                            <div class="form-group">
+                                <label for="floorNumber">Floor Number</label>
+                                <input type="number" id="floorNumber" placeholder="e.g., 3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="form-section">
+                        <h3>Pricing</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expectedPrice">Expected Price *</label>
+                                <input type="number" id="expectedPrice" placeholder="e.g., 4500000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="priceNegotiable">Price Negotiable</label>
+                                <select id="priceNegotiable">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="maintenanceCharge">Maintenance Charge (monthly)</label>
+                                <input type="number" id="maintenanceCharge" placeholder="e.g., 2000">
+                            </div>
+                            <div class="form-group">
+                                <label for="bookingAmount">Booking Amount</label>
+                                <input type="number" id="bookingAmount" placeholder="e.g., 100000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Amenities -->
+                    <div class="form-section">
+                        <h3>Amenities</h3>
+                        <div class="amenities-grid">
+                            <div class="amenity-option">
+                                <input type="checkbox" id="parking" value="Parking">
+                                <label for="parking">Parking</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="lift" value="Lift">
+                                <label for="lift">Lift</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="security" value="Security">
+                                <label for="security">Security</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="gym" value="Gym">
+                                <label for="gym">Gym</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="swimming" value="Swimming Pool">
+                                <label for="swimming">Swimming Pool</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="power" value="Power Backup">
+                                <label for="power">Power Backup</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="garden" value="Garden">
+                                <label for="garden">Garden</label>
+                            </div>
+                            <div class="amenity-option">
+                                <input type="checkbox" id="club" value="Club House">
+                                <label for="club">Club House</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Images -->
+                    <div class="form-section">
+                        <h3>Property Images</h3>
+                        <div class="image-upload">
+                            <div class="upload-area" id="uploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag and drop images here or click to browse</p>
+                                <input type="file" id="imageInput" multiple accept="image/*">
+                            </div>
+                            <div class="uploaded-images" id="uploadedImages">
+                                <!-- Uploaded images will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="form-section">
+                        <h3>Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ownerName">Your Name *</label>
+                                <input type="text" id="ownerName" placeholder="Your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ownerPhone">Phone Number *</label>
+                                <input type="tel" id="ownerPhone" placeholder="Your phone number" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ownerEmail">Email Address *</label>
+                                <input type="email" id="ownerEmail" placeholder="Your email address" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postedBy">Posted As</label>
+                                <select id="postedBy">
+                                    <option value="owner">Owner</option>
+                                    <option value="agent">Agent</option>
+                                    <option value="builder">Builder</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Submit -->
+                    <div class="form-section">
+                        <div class="terms-agreement">
+                            <input type="checkbox" id="termsAgreed" required>
+                            <label for="termsAgreed">
+                                I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="resetForm()">Reset Form</button>
+                            <button type="submit" class="btn-primary">Post Property</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seller Benefits -->
+    <section class="seller-benefits">
+        <div class="container">
+            <h2 class="section-title">Why Sell with IndoreHomes?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Wide Reach</h3>
+                    <p>Connect with thousands of potential buyers across Indore</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Best Price</h3>
+                    <p>Get competitive pricing with our market analysis tools</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Quick Sale</h3>
+                    <p>Sell your property faster with our verified buyer network</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Process</h3>
+                    <p>Safe and transparent transaction process</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Expert Support</h3>
+                    <p>24/7 customer support for all your queries</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3>No Hidden Fees</h3>
+                    <p>Transparent pricing with no hidden charges</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-modal-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Property Posted Successfully!</h2>
+                <p>Your property has been listed successfully. Our team will review and activate it within 24 hours.</p>
+                <div class="success-actions">
+                    <button class="btn-primary" onclick="viewProperty()">View Property</button>
+                    <button class="btn-secondary" onclick="postAnother()">Post Another</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <span id="successText">Message sent successfully!</span>
+    </div>
+
+    <script src="sell-script.js"></script>
+</body>
+</html>
