@@ -2643,7 +2643,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-}
 
 // Add CSS styles for home page sections
 const homePageStyles = document.createElement('style');
