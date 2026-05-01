@@ -342,11 +342,299 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     renderLocalities();
     renderProperties();
-    initializeTestimonials();
-    initializeContactForm();
+    renderFeaturedProperties();
+    initializeScrollEffects();
+});
+
+// Quick search function for home page
+function quickSearchHome() {
+    const location = document.getElementById('homeLocationFilter').value;
+    const type = document.getElementById('homeTypeFilter').value;
+    const budget = document.getElementById('homeBudgetFilter').value;
+    const bhk = document.getElementById('homeBhkFilter').value;
+    
+    console.log('Home quick search:', { location, type, budget, bhk });
+    
+    // Apply filters and navigate to appropriate page
+    applyHomeQuickSearch(location, type, budget, bhk);
+}
+
+// Apply home quick search filters
+function applyHomeQuickSearch(location, type, budget, bhk) {
+    // Determine which page to navigate to based on filters
+    let targetPage = 'buy.html'; // default
+    
+    // If budget is rental range, navigate to rent page
+    if (budget && (budget.includes('k') || budget.includes('K'))) {
+        targetPage = 'rent.html';
+    }
+    
+    // Build query parameters
+    const params = new URLSearchParams();
+    if (location) params.append('location', location);
+    if (type) params.append('type', type);
+    if (budget) params.append('budget', budget);
+    if (bhk) params.append('bhk', bhk);
+    
+    // Navigate to target page with filters
+    window.location.href = `${targetPage}?${params.toString()}`;
+}
+
+// Navigate to category
+function navigateToCategory(category) {
+    const categoryPages = {
+        'buy': 'buy.html',
+        'rent': 'rent.html',
+        'sell': 'sell.html',
+        'projects': 'projects.html'
+    };
+    
+    const targetPage = categoryPages[category];
+    if (targetPage) {
+        window.location.href = targetPage;
+    }
+}
+
+// Apply home filters
+function applyHomeFilters() {
+    const location = document.getElementById('locationFilter').value;
+    const propertyType = document.getElementById('propertyTypeFilter').value;
+    const budget = document.getElementById('budgetFilter').value;
+    const bhk = document.getElementById('bhkFilter').value;
+    const purpose = document.getElementById('purposeFilter').value;
+    
+    console.log('Home filters:', { location, propertyType, budget, bhk, purpose });
+    
+    // Determine target page based on purpose
+    let targetPage = 'buy.html';
+    if (purpose === 'rent') {
+        targetPage = 'rent.html';
+    } else if (purpose === 'sell') {
+        targetPage = 'sell.html';
+    }
+    
+    // Build query parameters
+    const params = new URLSearchParams();
+    if (location) params.append('location', location);
+    if (propertyType) params.append('type', propertyType);
+    if (budget) params.append('budget', budget);
+    if (bhk) params.append('bhk', bhk);
+    
+    // Navigate to target page with filters
+    window.location.href = `${targetPage}?${params.toString()}`;
+}
+
+// Reset home filters
+function resetHomeFilters() {
+    document.getElementById('locationFilter').value = '';
+    document.getElementById('propertyTypeFilter').value = '';
+    document.getElementById('budgetFilter').value = '';
+    document.getElementById('bhkFilter').value = '';
+    document.getElementById('purposeFilter').value = '';
+}
+
+// Render featured properties
+function renderFeaturedProperties() {
+    const featuredGrid = document.getElementById('featuredPropertiesGrid');
+    
+    if (!featuredGrid) return;
+    
+    // Get featured properties from the main properties array
+    const featuredProperties = properties.slice(0, 6); // Show first 6 as featured
+    
+    featuredGrid.innerHTML = '';
+    
+    featuredProperties.forEach((property, index) => {
+        const propertyCard = document.createElement('div');
+        propertyCard.className = 'property-card';
+        propertyCard.dataset.propertyId = property.id;
+        
+        // Use fallback image if original fails
+        const fallbackImage = `https://picsum.photos/seed/featured${index}/400/300.jpg`;
+        const imageUrl = property.image || fallbackImage;
+        
+        propertyCard.innerHTML = `
+            <div class="property-image" style="background-image: url('${imageUrl}')"
+                 onerror="this.style.backgroundImage='url(\'${fallbackImage}\')'">
+                <span class="property-badge">Featured</span>
+                <button class="property-save" onclick="toggleWishlistItem(${property.id})">
+                    <i class="far fa-heart"></i>
+                </button>
+                ${property.virtualTour ? '<div class="virtual-tour-badge">360° Tour</div>' : ''}
+            </div>
+            <div class="property-info">
+                <div class="property-price">${property.price}</div>
+                <h3 class="property-title">${property.title}</h3>
+                <div class="property-details">
+                    <span><i class="fas fa-bed"></i> ${property.bedrooms} Beds</span>
+                    <span><i class="fas fa-bath"></i> ${property.bathrooms} Baths</span>
+                    <span><i class="fas fa-expand"></i> ${property.area}</span>
+                </div>
+                <div class="property-location">
+                    <i class="fas fa-map-marker-alt"></i> ${property.location}
+                </div>
+                <div class="property-amenities">
+                    ${property.amenities.slice(0, 3).map(amenity => `<span>${amenity}</span>`).join('')}
+                </div>
+                <div class="property-actions">
+                    <button class="btn-view-details" onclick="showPropertyDetails(${property.id})">View Details</button>
+                    ${property.virtualTour ? `<button class="btn-virtual-tour" onclick="startVirtualTour(${property.id})">
+                        <i class="fas fa-vr-cardboard"></i> Virtual Tour
+                    </button>` : ''}
+                </div>
+            </div>
+        `;
+        
+        featuredGrid.appendChild(propertyCard);
+    });
+    
+    // Update wishlist buttons after rendering
+    setTimeout(() => updateWishlistButtons(), 100);
+}
+
+// Sort featured properties
+function sortFeaturedProperties() {
+    const sortOption = document.getElementById('featuredSortOptions').value;
+    
+    switch(sortOption) {
+        case 'price-low':
+            properties.sort((a, b) => a.price - b.price);
+            break;
+        case 'price-high':
+            properties.sort((a, b) => b.price - a.price);
+            break;
+        case 'newest':
+            properties.sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+            break;
+        case 'popular':
+            // Sort by views or popularity
+            properties.sort((a, b) => (b.views || 0) - (a.views || 0));
+            break;
+        default:
+            // Relevance - keep original order
+            properties.sort((a, b) => a.id - b.id);
+    }
+    
+    renderFeaturedProperties();
+}
+
+// View all properties
+function viewAllProperties() {
+    window.location.href = 'buy.html';
+}
+
+// Open EMI calculator
+function openEMICalculator() {
+    // Scroll to calculator section or open modal
+    const calculatorSection = document.querySelector('.mortgage-calculator');
+    if (calculatorSection) {
+        calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        // Show EMI calculator modal
+        alert('EMI Calculator feature coming soon!');
+    }
+}
+
+// Show localities
+function showLocalities() {
+    const localitiesSection = document.querySelector('.localities');
+    if (localitiesSection) {
+        localitiesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    initializeNavigation();
+    renderLocalities();
+    renderProperties();
+    renderFeaturedProperties();
     initializeScrollEffects();
     initializeEnhancedFeatures();
+    initializeImageErrorHandling();
+    initializeMortgageCalculator();
+    initializeChatSupport();
+    initializeWishlist();
+    initializeDataSync();
+    checkAdminSession();
+    setupLogoutButton();
+    
+    // Initialize new housing.com features
+    initializeEnhancedSearch();
+    initializePropertyComparison();
+    initializeViewToggle();
+    initializeSearchSuggestions();
+    initializeQuickLinks();
+    
+    // Force initialization to ensure content loads
+    forceInitialization();
+    
+    // Ensure login button is visible
+    const loginBtn = document.querySelector('.btn-login');
+    if (loginBtn) {
+        loginBtn.style.display = 'block';
+        loginBtn.style.visibility = 'visible';
+        console.log('Login button made visible');
+    }
 });
+
+// Window load event to ensure everything is visible
+window.addEventListener('load', function() {
+    console.log('Window fully loaded, ensuring visibility...');
+    
+    // Force render again if needed
+    setTimeout(() => {
+        const localitiesGrid = document.getElementById('localitiesGrid');
+        const propertiesGrid = document.querySelector('.properties-grid');
+        
+        if (!localitiesGrid || localitiesGrid.children.length === 0) {
+            console.log('Re-rendering localities...');
+            renderLocalities();
+        }
+        
+        if (!propertiesGrid || propertiesGrid.children.length === 0) {
+            console.log('Re-rendering properties...');
+            renderProperties();
+        }
+        
+        // Ensure login button is visible
+        const loginBtn = document.querySelector('.btn-login');
+        if (loginBtn) {
+            loginBtn.style.display = 'block';
+            loginBtn.style.visibility = 'visible';
+            loginBtn.style.opacity = '1';
+            console.log('Login button visibility confirmed');
+        }
+    }, 500);
+});
+
+// Image error handling
+function initializeImageErrorHandling() {
+    // Add error handling to all images
+    document.addEventListener('error', function(e) {
+        if (e.target.tagName === 'IMG') {
+            console.log('Image failed to load:', e.target.src);
+            // Use a fallback image
+            e.target.src = `https://picsum.photos/seed/fallback${Date.now()}/400/300.jpg`;
+        }
+    }, true);
+    
+    // Add error handling to background images
+    const elementsWithBgImages = document.querySelectorAll('[style*="background-image"]');
+    elementsWithBgImages.forEach(element => {
+        const bgImage = element.style.backgroundImage;
+        const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/);
+        if (urlMatch) {
+            const img = new Image();
+            img.src = urlMatch[1];
+            img.onerror = function() {
+                console.log('Background image failed to load:', urlMatch[1]);
+                element.style.backgroundImage = `url('https://picsum.photos/seed/fallback${Date.now()}/400/300.jpg')`;
+            };
+        }
+    });
+}
 
 // Advanced Search with Autocomplete
 const searchSuggestions = [
@@ -956,21 +1244,6 @@ function updateWishlistButtons() {
     });
 }
 
-// Enhanced initialization
-document.addEventListener('DOMContentLoaded', function() {
-    initializeNavigation();
-    renderLocalities();
-    renderProperties();
-    initializeTestimonials();
-    initializeContactForm();
-    initializeScrollEffects();
-    initializeEnhancedFeatures();
-    initializeMortgageCalculator();
-    initializeChatSupport();
-    initializeWishlist();
-    initializeDataSync();
-    initializeAdminAccess();
-});
 
 // Admin Access Functions
 function initializeAdminAccess() {
@@ -1013,8 +1286,9 @@ function initializeAdminAccess() {
 }
 
 function checkAdminSession() {
-    const sessionData = localStorage.getItem('adminSession');
-    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const sessionData = localStorage.getItem('userSession');
+    const loginBtn = document.querySelector('.btn-login');
+    const postPropertyBtn = document.getElementById('postPropertyBtn');
     
     if (sessionData) {
         try {
@@ -1024,21 +1298,56 @@ function checkAdminSession() {
             
             // Check if session is still valid
             if (currentTime - loginTime < session.sessionTimeout) {
-                // Show admin button
-                if (adminLoginBtn) {
-                    adminLoginBtn.style.display = 'flex';
+                // User is logged in
+                if (loginBtn) {
+                    loginBtn.textContent = 'Logout';
+                    loginBtn.onclick = logout;
+                    loginBtn.style.background = '#dc2626';
                 }
                 
-                // Add admin logout functionality
-                addAdminLogout();
+                // Show post property button for logged-in users
+                if (postPropertyBtn) {
+                    postPropertyBtn.style.display = 'block';
+                    postPropertyBtn.onclick = function() {
+                        window.location.href = 'admin.html';
+                    };
+                }
+                
+                console.log('User session active:', session.username);
             } else {
                 // Session expired, remove it
                 clearAdminSession();
             }
         } catch (error) {
-            console.error('Error checking admin session:', error);
+            console.error('Error checking user session:', error);
             clearAdminSession();
         }
+    } else {
+        // No session, show login button
+        if (loginBtn) {
+            loginBtn.textContent = 'Login';
+            loginBtn.onclick = function() {
+                window.location.href = 'admin-login.html';
+            };
+            loginBtn.style.background = '';
+        }
+    }
+}
+
+function setupLogoutButton() {
+    // This function ensures logout button is properly set up
+    checkAdminSession();
+}
+
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        clearAdminSession();
+        showSuccessMessage('Logged out successfully!');
+        
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
     }
 }
 
@@ -1057,15 +1366,27 @@ function addAdminLogout() {
 }
 
 function clearAdminSession() {
-    localStorage.removeItem('adminSession');
+    localStorage.removeItem('userSession');
     document.cookie = 'adminAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     
-    // Hide admin button
-    const adminLoginBtn = document.getElementById('adminLoginBtn');
-    if (adminLoginBtn) {
-        adminLoginBtn.style.display = 'none';
-        adminLoginBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Admin';
+    // Reset login button
+    const loginBtn = document.querySelector('.btn-login');
+    if (loginBtn) {
+        loginBtn.textContent = 'Login';
+        loginBtn.onclick = function() {
+            window.location.href = 'admin-login.html';
+        };
+        loginBtn.style.background = '';
     }
+    
+    // Hide post property button
+    const postPropertyBtn = document.getElementById('postPropertyBtn');
+    if (postPropertyBtn) {
+        postPropertyBtn.style.display = 'none';
+    }
+    
+    console.log('Session cleared');
 }
 
 // Data Sync with Admin Panel
@@ -1421,11 +1742,28 @@ function initializeNavigation() {
 function renderLocalities() {
     const localitiesGrid = document.getElementById('localitiesGrid');
     
-    localities.forEach(locality => {
+    if (!localitiesGrid) {
+        console.error('Localities grid element not found');
+        return;
+    }
+    
+    console.log('Rendering localities:', localities.length);
+    
+    // Clear existing content
+    localitiesGrid.innerHTML = '';
+    
+    // Force render localities with fallback images
+    localities.forEach((locality, index) => {
         const localityCard = document.createElement('div');
         localityCard.className = 'locality-card';
+        
+        // Use fallback image if original fails
+        const fallbackImage = `https://picsum.photos/seed/locality${index}/400/300.jpg`;
+        const imageUrl = locality.image || fallbackImage;
+        
         localityCard.innerHTML = `
-            <div class="locality-image" style="background-image: url('${locality.image}')">
+            <div class="locality-image" style="background-image: url('${imageUrl}')" 
+                 onerror="this.style.backgroundImage='url(\'${fallbackImage}\')'">
                 <span class="locality-badge">${locality.demand} Demand</span>
             </div>
             <div class="locality-info">
@@ -1441,21 +1779,37 @@ function renderLocalities() {
         
         localitiesGrid.appendChild(localityCard);
     });
+    
+    console.log('Localities rendered successfully');
 }
 
 // Render properties
 function renderProperties(filteredProperties = properties) {
     const propertiesGrid = document.querySelector('.properties-grid');
     
+    if (!propertiesGrid) {
+        console.error('Properties grid element not found');
+        return;
+    }
+    
+    console.log('Rendering properties:', filteredProperties.length);
+    
+    // Clear existing content
     propertiesGrid.innerHTML = '';
     
-    filteredProperties.forEach(property => {
+    // Force render properties with fallback images
+    filteredProperties.forEach((property, index) => {
         const propertyCard = document.createElement('div');
         propertyCard.className = 'property-card';
         propertyCard.dataset.propertyId = property.id;
         
+        // Use fallback image if original fails
+        const fallbackImage = `https://picsum.photos/seed/property${index}/400/300.jpg`;
+        const imageUrl = property.image || fallbackImage;
+        
         propertyCard.innerHTML = `
-            <div class="property-image" style="background-image: url('${property.image}')">
+            <div class="property-image" style="background-image: url('${imageUrl}')"
+                 onerror="this.style.backgroundImage='url(\'${fallbackImage}\')'">
                 <span class="property-badge">Verified</span>
                 <button class="property-save" onclick="toggleWishlistItem(${property.id})">
                     <i class="far fa-heart"></i>
@@ -1488,8 +1842,374 @@ function renderProperties(filteredProperties = properties) {
         propertiesGrid.appendChild(propertyCard);
     });
     
+    console.log('Properties rendered successfully');
+    
     // Update wishlist buttons after rendering
     setTimeout(() => updateWishlistButtons(), 100);
+}
+
+// Force initialization function
+function forceInitialization() {
+    console.log('Force initializing page content...');
+    
+    // Force render localities and properties
+    setTimeout(() => {
+        renderLocalities();
+        renderProperties();
+        console.log('Force initialization completed');
+    }, 100);
+}
+
+// Enhanced Search Functions
+function initializeEnhancedSearch() {
+    // Search tabs functionality
+    const searchTabs = document.querySelectorAll('.search-tab');
+    searchTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            searchTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const tabType = this.getAttribute('data-tab');
+            updateSearchForTab(tabType);
+        });
+    });
+    
+    // Property sort functionality
+    const propertySort = document.getElementById('propertySort');
+    if (propertySort) {
+        propertySort.addEventListener('change', function() {
+            sortProperties(this.value);
+        });
+    }
+}
+
+function updateSearchForTab(tabType) {
+    const globalSearch = document.getElementById('globalSearch');
+    const placeholders = {
+        'buy': 'Search by locality, project, society, landmark...',
+        'rent': 'Search rental properties by location, type...',
+        'sell': 'Check property values in your area...',
+        'projects': 'Search new projects and launches...'
+    };
+    
+    if (globalSearch && placeholders[tabType]) {
+        globalSearch.placeholder = placeholders[tabType];
+    }
+    
+    // Update search results based on tab
+    filterPropertiesByTab(tabType);
+}
+
+function toggleAdvancedSearch() {
+    const panel = document.getElementById('advancedSearchPanel');
+    const toggle = document.querySelector('.advanced-search-toggle');
+    
+    if (panel) {
+        panel.classList.toggle('show');
+        toggle.classList.toggle('active');
+    }
+}
+
+function resetFilters() {
+    const filters = ['locationFilter', 'propertyTypeFilter', 'budgetFilter', 'bhkFilter', 
+                    'propertyStatusFilter', 'possessionFilter', 'ageFilter', 'areaFilter'];
+    
+    filters.forEach(filterId => {
+        const filter = document.getElementById(filterId);
+        if (filter) {
+            filter.value = '';
+        }
+    });
+    
+    // Reset search
+    renderProperties();
+    showSuccessMessage('Filters reset successfully');
+}
+
+// Search Suggestions
+function initializeSearchSuggestions() {
+    const globalSearch = document.getElementById('globalSearch');
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    
+    if (globalSearch && suggestionsContainer) {
+        const suggestions = [
+            'Vijay Nagar', 'Super Corridor', 'Rau', 'Nipania', 'Palasia',
+            '3 BHK Flats', '2 BHK Apartments', 'Luxury Villas',
+            'Properties under 50 Lakhs', 'Ready to Move Flats',
+            'Independent Houses', 'PG Accommodations', 'Commercial Spaces'
+        ];
+        
+        globalSearch.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            if (value.length > 0) {
+                const filtered = suggestions.filter(s => s.toLowerCase().includes(value));
+                showSuggestions(filtered);
+            } else {
+                hideSuggestions();
+            }
+        });
+        
+        globalSearch.addEventListener('focus', function() {
+            if (this.value.length > 0) {
+                const value = this.value.toLowerCase();
+                const filtered = suggestions.filter(s => s.toLowerCase().includes(value));
+                showSuggestions(filtered);
+            }
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!globalSearch.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                hideSuggestions();
+            }
+        });
+    }
+}
+
+function showSuggestions(suggestions) {
+    const container = document.getElementById('searchSuggestions');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    suggestions.forEach(suggestion => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = suggestion;
+        item.addEventListener('click', function() {
+            document.getElementById('globalSearch').value = suggestion;
+            hideSuggestions();
+            performGlobalSearch(suggestion);
+        });
+        container.appendChild(item);
+    });
+    
+    container.classList.add('show');
+}
+
+function hideSuggestions() {
+    const container = document.getElementById('searchSuggestions');
+    if (container) {
+        container.classList.remove('show');
+    }
+}
+
+function performGlobalSearch(query) {
+    console.log('Searching for:', query);
+    // Implement global search logic
+    filterPropertiesBySearch(query);
+}
+
+// Property Comparison
+function initializePropertyComparison() {
+    // Comparison functionality will be handled in renderProperties
+}
+
+let selectedForComparison = new Set();
+
+function togglePropertyComparison(propertyId) {
+    const checkbox = document.querySelector(`.compare-checkbox[data-property-id="${propertyId}"]`);
+    const compareBar = document.getElementById('comparisonBar');
+    const comparisonCount = document.getElementById('comparisonCount');
+    const compareBtn = document.querySelector('.btn-compare');
+    
+    if (selectedForComparison.has(propertyId)) {
+        selectedForComparison.delete(propertyId);
+        checkbox.classList.remove('checked');
+    } else {
+        if (selectedForComparison.size >= 3) {
+            showSuccessMessage('You can compare maximum 3 properties at a time');
+            return;
+        }
+        selectedForComparison.add(propertyId);
+        checkbox.classList.add('checked');
+    }
+    
+    // Update comparison bar
+    if (selectedForComparison.size > 0) {
+        compareBar.style.display = 'flex';
+        comparisonCount.textContent = selectedForComparison.size;
+        compareBtn.disabled = selectedForComparison.size < 2;
+    } else {
+        compareBar.style.display = 'none';
+    }
+}
+
+function compareProperties() {
+    if (selectedForComparison.size >= 2) {
+        console.log('Comparing properties:', Array.from(selectedForComparison));
+        showSuccessMessage('Opening comparison view...');
+        // Implement comparison modal or page
+    }
+}
+
+function clearComparison() {
+    selectedForComparison.clear();
+    document.querySelectorAll('.compare-checkbox').forEach(cb => {
+        cb.classList.remove('checked');
+    });
+    document.getElementById('comparisonBar').style.display = 'none';
+}
+
+// View Toggle
+function initializeViewToggle() {
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const propertiesGrid = document.getElementById('propertiesGrid');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            viewBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const view = this.getAttribute('data-view');
+            if (view === 'list') {
+                propertiesGrid.classList.add('list-view');
+            } else {
+                propertiesGrid.classList.remove('list-view');
+            }
+        });
+    });
+}
+
+// Quick Links
+function initializeQuickLinks() {
+    const quickLinks = document.querySelectorAll('.quick-link-item');
+    quickLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const text = this.textContent.trim();
+            console.log('Quick link clicked:', text);
+            // Implement quick link navigation
+            performGlobalSearch(text);
+        });
+    });
+    
+    const trendingItems = document.querySelectorAll('.trending-item a');
+    trendingItems.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const text = this.textContent.trim();
+            console.log('Trending search clicked:', text);
+            performGlobalSearch(text);
+        });
+    });
+    
+    const propertyTypeCards = document.querySelectorAll('.property-type-card');
+    propertyTypeCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const type = this.querySelector('span').textContent;
+            console.log('Property type clicked:', type);
+            filterPropertiesByType(type);
+        });
+    });
+}
+
+// Enhanced Property Rendering
+function renderProperties(filteredProperties = properties) {
+    const propertiesGrid = document.querySelector('.properties-grid');
+    
+    if (!propertiesGrid) {
+        console.error('Properties grid element not found');
+        return;
+    }
+    
+    console.log('Rendering properties:', filteredProperties.length);
+    
+    // Clear existing content
+    propertiesGrid.innerHTML = '';
+    
+    // Force render properties with fallback images and comparison checkboxes
+    filteredProperties.forEach((property, index) => {
+        const propertyCard = document.createElement('div');
+        propertyCard.className = 'property-card';
+        propertyCard.dataset.propertyId = property.id;
+        
+        // Use fallback image if original fails
+        const fallbackImage = `https://picsum.photos/seed/property${index}/400/300.jpg`;
+        const imageUrl = property.image || fallbackImage;
+        
+        propertyCard.innerHTML = `
+            <div class="compare-checkbox" data-property-id="${property.id}" onclick="togglePropertyComparison(${property.id})">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <div class="property-image" style="background-image: url('${imageUrl}')"
+                 onerror="this.style.backgroundImage='url(\'${fallbackImage}\')'">
+                <span class="property-badge">Verified</span>
+                <button class="property-save" onclick="toggleWishlistItem(${property.id})">
+                    <i class="far fa-heart"></i>
+                </button>
+                ${property.virtualTour ? '<div class="virtual-tour-badge">360° Tour</div>' : ''}
+            </div>
+            <div class="property-info">
+                <div class="property-price">${property.price}</div>
+                <h3 class="property-title">${property.title}</h3>
+                <div class="property-details">
+                    <span><i class="fas fa-bed"></i> ${property.bedrooms} Beds</span>
+                    <span><i class="fas fa-bath"></i> ${property.bathrooms} Baths</span>
+                    <span><i class="fas fa-expand"></i> ${property.area}</span>
+                </div>
+                <div class="property-location">
+                    <i class="fas fa-map-marker-alt"></i> ${property.location}
+                </div>
+                <div class="property-amenities">
+                    ${property.amenities.slice(0, 3).map(amenity => `<span>${amenity}</span>`).join('')}
+                </div>
+                <div class="property-actions">
+                    <button class="btn-view-details" onclick="showPropertyDetails(${property.id})">View Details</button>
+                    ${property.virtualTour ? `<button class="btn-virtual-tour" onclick="startVirtualTour(${property.id})">
+                        <i class="fas fa-vr-cardboard"></i> Virtual Tour
+                    </button>` : ''}
+                </div>
+            </div>
+        `;
+        
+        propertiesGrid.appendChild(propertyCard);
+    });
+    
+    console.log('Properties rendered successfully');
+    
+    // Update results count
+    updateResultsCount(filteredProperties.length);
+}
+
+// Additional helper functions
+function updateResultsCount(count) {
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+        resultsCount.textContent = `Showing ${count} properties`;
+    }
+}
+
+function filterPropertiesByTab(tabType) {
+    // Implement tab-based filtering
+    console.log('Filtering by tab:', tabType);
+    renderProperties();
+}
+
+function filterPropertiesBySearch(query) {
+    // Implement search filtering
+    console.log('Filtering by search:', query);
+    renderProperties();
+}
+
+function filterPropertiesByType(type) {
+    // Implement type filtering
+    console.log('Filtering by type:', type);
+    renderProperties();
+}
+
+function sortProperties(sortBy) {
+    // Implement sorting
+    console.log('Sorting by:', sortBy);
+    renderProperties();
+}
+
+// Pagination functions
+function previousPage() {
+    console.log('Previous page');
+    // Implement pagination
+}
+
+function nextPage() {
+    console.log('Next page');
+    // Implement pagination
 }
 
 // Search properties
@@ -1924,4 +2644,190 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 }
-}
+
+// Add CSS styles for home page sections
+const homePageStyles = document.createElement('style');
+homePageStyles.textContent = `
+    /* Home Hero Section */
+    .home-hero {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .home-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+        opacity: 0.15;
+        z-index: 0;
+    }
+    
+    .home-hero .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Property Categories */
+    .property-categories {
+        padding: 4rem 0;
+        background: #f9fafb;
+    }
+    
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .category-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        border-color: #1e40af;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+    }
+    
+    .category-card.active {
+        border-color: #1e40af;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    }
+    
+    .category-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .category-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    .category-card p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+    }
+    
+    .category-count {
+        background: #1e40af;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    /* Real Estate Guide */
+    .real-estate-guide {
+        padding: 4rem 0;
+        background: white;
+    }
+    
+    .guide-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .guide-card {
+        background: #f9fafb;
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .guide-card:hover {
+        transform: translateY(-5px);
+        border-color: #1e40af;
+        background: white;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+    }
+    
+    .guide-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .guide-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    .guide-card p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    
+    .guide-link {
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .guide-link:hover {
+        gap: 0.75rem;
+    }
+    
+    /* Featured Properties */
+    .featured-properties {
+        padding: 4rem 0;
+        background: #f9fafb;
+    }
+    
+    .view-all-section {
+        text-align: center;
+        margin-top: 3rem;
+    }
+    
+    .view-all-section .btn-primary {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+`;
+document.head.appendChild(homePageStyles);
+

@@ -344,6 +344,129 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollEffects();
 });
 
+// Quick search function
+function quickSearchBuy() {
+    const location = document.getElementById('quickLocationFilter').value;
+    const type = document.getElementById('quickTypeFilter').value;
+    const budget = document.getElementById('quickBudgetFilter').value;
+    const bhk = document.getElementById('quickBhkFilter').value;
+    
+    console.log('Quick search:', { location, type, budget, bhk });
+    
+    // Apply filters and search
+    applyQuickSearchFilters(location, type, budget, bhk);
+}
+
+// Apply quick search filters
+function applyQuickSearchFilters(location, type, budget, bhk) {
+    filteredProperties = buyProperties.filter(property => {
+        let match = true;
+        
+        if (location) {
+            const locationMap = {
+                'vijay-nagar': 'Vijay Nagar',
+                'super-corridor': 'Super Corridor',
+                'rau': 'Rau',
+                'nipania': 'Nipania',
+                'palasia': 'Palasia',
+                'bhawarkuan': 'Bhawarkuan',
+                'bengali-square': 'Bengali Square',
+                'ab-road': 'AB Road',
+                'scheme-140': 'Scheme 140',
+                'mr-10': 'MR 10'
+            };
+            match = match && property.location === locationMap[location];
+        }
+        
+        if (type) {
+            match = match && property.type === type;
+        }
+        
+        if (bhk) {
+            match = match && property.bhk === bhk;
+        }
+        
+        if (budget) {
+            if (budget === '0-20lakh') match = match && property.price <= 20;
+            else if (budget === '20lakh-50lakh') match = match && property.price >= 20 && property.price <= 50;
+            else if (budget === '50lakh-1cr') match = match && property.price >= 50 && property.price <= 100;
+            else if (budget === '1cr-2cr') match = match && property.price >= 100 && property.price <= 200;
+            else if (budget === '2cr+') match = match && property.price > 200;
+        }
+        
+        return match;
+    });
+    
+    currentPage = 1;
+    renderBuyProperties();
+    
+    if (filteredProperties.length === 0) {
+        document.getElementById('buyPropertiesGrid').innerHTML = '<div class="no-results"><p>No properties found matching your criteria. Try adjusting your filters.</p></div>';
+    }
+}
+
+// Filter by category
+function filterByCategory(category) {
+    filteredProperties = buyProperties.filter(property => property.type === category);
+    currentPage = 1;
+    renderBuyProperties();
+    
+    // Update active category
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.remove('active');
+    });
+    event.target.closest('.category-card').classList.add('active');
+}
+
+// Sort buy properties
+function sortBuyProperties() {
+    const sortOption = document.getElementById('buySortOptions').value;
+    
+    switch(sortOption) {
+        case 'price-low':
+            filteredProperties.sort((a, b) => a.price - b.price);
+            break;
+        case 'price-high':
+            filteredProperties.sort((a, b) => b.price - a.price);
+            break;
+        case 'newest':
+            filteredProperties.sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+            break;
+        case 'area-low':
+            filteredProperties.sort((a, b) => a.area - b.area);
+            break;
+        case 'area-high':
+            filteredProperties.sort((a, b) => b.area - a.area);
+            break;
+        default:
+            // Relevance - keep original order
+            filteredProperties = [...buyProperties];
+    }
+    
+    renderBuyProperties();
+}
+
+// Pagination functions for buy properties
+function previousBuyPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderBuyProperties();
+    }
+}
+
+function nextBuyPage() {
+    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderBuyProperties();
+    }
+}
+
+function goToBuyPage(page) {
+    currentPage = page;
+    renderBuyProperties();
+}
+
 // Navigation functionality (same as homepage)
 function initializeNavigation() {
     const navToggle = document.getElementById('navToggle');
@@ -696,12 +819,12 @@ function closeModal() {
 
 // Pagination functions
 function updateResultsCount() {
-    const resultsCount = document.getElementById('resultsCount');
+    const resultsCount = document.getElementById('buyResultsCount');
     const totalResults = filteredProperties.length;
     const startResult = (currentPage - 1) * propertiesPerPage + 1;
     const endResult = Math.min(currentPage * propertiesPerPage, totalResults);
     
-    resultsCount.textContent = `${startResult}-${endResult} of ${totalResults}`;
+    resultsCount.textContent = `${startResult}-${endResult}`;
 }
 
 function updatePagination() {
@@ -802,79 +925,183 @@ window.onclick = function(event) {
     }
 }
 
-// Add additional CSS styles
+// Add additional CSS styles for buy page
 const additionalStyles = document.createElement('style');
 additionalStyles.textContent = `
-    .page-header {
-        background: linear-gradient(135deg, #1e40af, #2563eb);
-        color: white;
-        padding: 8rem 0 4rem;
-        text-align: center;
+    /* Buy Hero Section */
+    .buy-hero {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        position: relative;
+        overflow: hidden;
     }
     
-    .page-header-content h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+    .buy-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+        opacity: 0.15;
+        z-index: 0;
     }
     
-    .page-header-content p {
-        font-size: 1.2rem;
-        opacity: 0.9;
+    .buy-hero .hero-content {
+        position: relative;
+        z-index: 1;
     }
     
-    .advanced-search {
-        padding: 3rem 0;
+    /* Property Categories */
+    .property-categories {
+        padding: 4rem 0;
         background: #f9fafb;
-        margin-top: -2rem;
     }
     
-    .search-container {
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .category-card {
         background: white;
         padding: 2rem;
         border-radius: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
     
-    .search-container h2 {
+    .category-card:hover {
+        transform: translateY(-5px);
+        border-color: #1e40af;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+    }
+    
+    .category-card.active {
+        border-color: #1e40af;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    }
+    
+    .category-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
         font-size: 1.5rem;
-        color: #1f2937;
-        margin-bottom: 1.5rem;
+        color: white;
     }
     
-    .filter-row {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-    
-    .filter-group label {
-        display: block;
-        font-weight: 500;
+    .category-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
         color: #1f2937;
         margin-bottom: 0.5rem;
     }
     
-    .filter-group select {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-family: 'Poppins', sans-serif;
+    .category-card p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+    }
+    
+    .category-count {
+        background: #1e40af;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    /* Buying Guide */
+    .buying-guide {
+        padding: 4rem 0;
+        background: white;
+    }
+    
+    .guide-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .guide-card {
+        background: #f9fafb;
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .guide-card:hover {
+        transform: translateY(-5px);
+        border-color: #1e40af;
+        background: white;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+    }
+    
+    .guide-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .guide-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    .guide-card p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    
+    .guide-link {
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         transition: all 0.3s ease;
     }
     
-    .filter-group select:focus {
-        outline: none;
-        border-color: #1e40af;
-        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    .guide-link:hover {
+        gap: 0.75rem;
     }
     
-    .filter-actions {
-        display: flex;
-        gap: 1rem;
-        align-items: end;
+    /* No Results */
+    .no-results {
+        text-align: center;
+        padding: 3rem;
+        background: #f9fafb;
+        border-radius: 16px;
+        margin: 2rem 0;
+    }
+    
+    .no-results p {
+        color: #6b7280;
+        font-size: 1.1rem;
     }
     
     .btn-secondary {

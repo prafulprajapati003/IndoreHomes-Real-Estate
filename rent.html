@@ -29,8 +29,8 @@
                     <a href="contact.html" class="nav-link">Contact</a>
                 </div>
                 <div class="nav-actions">
-                    <button class="btn-login">Login</button>
-                    <button class="btn-primary">Post Property</button>
+                    <button class="btn-primary" onclick="window.location.href='admin-login.html'">Login</button>
+                    <!-- <button class="btn-primary">Post Property</button> -->
                     <div class="nav-toggle" id="navToggle">
                         <i class="fas fa-bars"></i>
                     </div>
@@ -39,12 +39,90 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Hero Section -->
+    <section class="hero rent-hero">
+        <div class="hero-overlay"></div>
         <div class="container">
-            <div class="page-header-content">
-                <h1>Rent Properties in Indore</h1>
-                <p>Find the perfect rental property from our extensive collection</p>
+            <div class="hero-content">
+                <h1 class="hero-title">Find Your Rental Property in Indore</h1>
+                <p class="hero-subtitle">Discover perfect rental homes, flats, PGs, and commercial spaces with verified listings and best prices</p>
+                
+                <!-- Quick Search Bar -->
+                <div class="quick-search-bar">
+                    <div class="quick-search-filters">
+                        <div class="filter-group">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="quickLocationFilter" class="filter-select">
+                                <option value="">All Locations</option>
+                                <option value="vijay-nagar">Vijay Nagar</option>
+                                <option value="super-corridor">Super Corridor</option>
+                                <option value="rau">Rau</option>
+                                <option value="nipania">Nipania</option>
+                                <option value="palasia">Palasia</option>
+                                <option value="bhawarkuan">Bhawarkuan</option>
+                                <option value="bengali-square">Bengali Square</option>
+                                <option value="ab-road">AB Road</option>
+                                <option value="scheme-140">Scheme 140</option>
+                                <option value="mr-10">MR 10</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <i class="fas fa-building"></i>
+                            <select id="quickTypeFilter" class="filter-select">
+                                <option value="">All Types</option>
+                                <option value="flat">Flats</option>
+                                <option value="villa">Villas</option>
+                                <option value="pg">PG</option>
+                                <option value="commercial">Commercial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <i class="fas fa-rupee-sign"></i>
+                            <select id="quickBudgetFilter" class="filter-select">
+                                <option value="">All Budgets</option>
+                                <option value="0-10k">Below ₹10,000</option>
+                                <option value="10k-20k">₹10,000 - ₹20,000</option>
+                                <option value="20k-35k">₹20,000 - ₹35,000</option>
+                                <option value="35k-50k">₹35,000 - ₹50,000</option>
+                                <option value="50k+">Above ₹50,000</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <i class="fas fa-bed"></i>
+                            <select id="quickBhkFilter" class="filter-select">
+                                <option value="">All BHK</option>
+                                <option value="1rk">1 RK</option>
+                                <option value="1bhk">1 BHK</option>
+                                <option value="2bhk">2 BHK</option>
+                                <option value="3bhk">3 BHK</option>
+                                <option value="4bhk+">4+ BHK</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn-search" onclick="quickSearchRentals()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">1,250+</div>
+                        <div class="stat-label">Rental Properties</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Localities</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Verified Listings</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -93,115 +171,6 @@
         </div>
     </section>
 
-    <!-- Advanced Search Section -->
-    <section class="advanced-search">
-        <div class="container">
-            <div class="search-container">
-                <h2>Find Your Rental Property</h2>
-                <div class="advanced-filters">
-                    <div class="filter-row">
-                        <div class="filter-group">
-                            <label>Location</label>
-                            <select id="rentLocationFilter">
-                                <option value="">All Locations</option>
-                                <option value="vijay-nagar">Vijay Nagar</option>
-                                <option value="super-corridor">Super Corridor</option>
-                                <option value="rau">Rau</option>
-                                <option value="nipania">Nipania</option>
-                                <option value="palasia">Palasia</option>
-                                <option value="bhawarkuan">Bhawarkuan</option>
-                                <option value="bengali-square">Bengali Square</option>
-                                <option value="ab-road">AB Road</option>
-                                <option value="scheme-140">Scheme 140</option>
-                                <option value="mr-10">MR 10</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Property Type</label>
-                            <select id="rentPropertyTypeFilter">
-                                <option value="">All Types</option>
-                                <option value="flat">Flats</option>
-                                <option value="villa">Villas</option>
-                                <option value="pg">PG</option>
-                                <option value="commercial">Commercial</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Min Rent</label>
-                            <select id="minRentFilter">
-                                <option value="">No Min</option>
-                                <option value="5000">5,000</option>
-                                <option value="10000">10,000</option>
-                                <option value="15000">15,000</option>
-                                <option value="20000">20,000</option>
-                                <option value="30000">30,000</option>
-                                <option value="50000">50,000</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Max Rent</label>
-                            <select id="maxRentFilter">
-                                <option value="">No Max</option>
-                                <option value="10000">10,000</option>
-                                <option value="15000">15,000</option>
-                                <option value="20000">20,000</option>
-                                <option value="30000">30,000</option>
-                                <option value="50000">50,000</option>
-                                <option value="100000">1,00,000</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="filter-row">
-                        <div class="filter-group">
-                            <label>BHK</label>
-                            <select id="rentBhkFilter">
-                                <option value="">All BHK</option>
-                                <option value="1rk">1 RK</option>
-                                <option value="1bhk">1 BHK</option>
-                                <option value="2bhk">2 BHK</option>
-                                <option value="3bhk">3 BHK</option>
-                                <option value="4bhk+">4+ BHK</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Furnishing</label>
-                            <select id="furnishingFilter">
-                                <option value="">Any</option>
-                                <option value="fully-furnished">Fully Furnished</option>
-                                <option value="semi-furnished">Semi Furnished</option>
-                                <option value="unfurnished">Unfurnished</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Available From</label>
-                            <select id="availableFilter">
-                                <option value="">Anytime</option>
-                                <option value="immediate">Immediate</option>
-                                <option value="within-15">Within 15 days</option>
-                                <option value="within-30">Within 30 days</option>
-                                <option value="within-60">Within 60 days</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-actions">
-                            <button class="btn-primary" onclick="applyRentFilters()">
-                                <i class="fas fa-search"></i> Search
-                            </button>
-                            <button class="btn-secondary" onclick="resetRentFilters()">
-                                <i class="fas fa-redo"></i> Reset
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Properties Listing -->
     <section class="properties-listing">

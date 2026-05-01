@@ -29,8 +29,8 @@
                     <a href="contact.html" class="nav-link">Contact</a>
                 </div>
                 <div class="nav-actions">
-                    <button class="btn-login">Login</button>
-                    <button class="btn-primary">Post Property</button>
+                    <button class="btn-primary" onclick="window.location.href='admin-login.html'">Login</button>
+                    <!-- <button class="btn-primary">Post Property</button> -->
                     <div class="nav-toggle" id="navToggle">
                         <i class="fas fa-bars"></i>
                     </div>
@@ -39,26 +39,20 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Hero Section -->
+    <section class="hero buy-hero">
+        <div class="hero-overlay"></div>
         <div class="container">
-            <div class="page-header-content">
-                <h1>Buy Properties in Indore</h1>
-                <p>Find your dream home from our extensive collection of verified properties</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Advanced Search Section -->
-    <section class="advanced-search">
-        <div class="container">
-            <div class="search-container">
-                <h2>Advanced Search</h2>
-                <div class="advanced-filters">
-                    <div class="filter-row">
+            <div class="hero-content">
+                <h1 class="hero-title">Find Your Dream Property in Indore</h1>
+                <p class="hero-subtitle">Discover perfect homes, flats, villas, and commercial spaces with verified listings and best prices</p>
+                
+                <!-- Quick Search Bar -->
+                <div class="quick-search-bar">
+                    <div class="quick-search-filters">
                         <div class="filter-group">
-                            <label>Location</label>
-                            <select id="buyLocationFilter">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="quickLocationFilter" class="filter-select">
                                 <option value="">All Locations</option>
                                 <option value="vijay-nagar">Vijay Nagar</option>
                                 <option value="super-corridor">Super Corridor</option>
@@ -74,8 +68,8 @@
                         </div>
                         
                         <div class="filter-group">
-                            <label>Property Type</label>
-                            <select id="buyPropertyTypeFilter">
+                            <i class="fas fa-building"></i>
+                            <select id="quickTypeFilter" class="filter-select">
                                 <option value="">All Types</option>
                                 <option value="flat">Flats</option>
                                 <option value="villa">Villas</option>
@@ -85,38 +79,20 @@
                         </div>
                         
                         <div class="filter-group">
-                            <label>Min Budget</label>
-                            <select id="minBudgetFilter">
-                                <option value="">No Min</option>
-                                <option value="10">10 Lakhs</option>
-                                <option value="20">20 Lakhs</option>
-                                <option value="30">30 Lakhs</option>
-                                <option value="50">50 Lakhs</option>
-                                <option value="75">75 Lakhs</option>
-                                <option value="1cr">1 Crore</option>
-                                <option value="2cr">2 Crore</option>
+                            <i class="fas fa-rupee-sign"></i>
+                            <select id="quickBudgetFilter" class="filter-select">
+                                <option value="">All Budgets</option>
+                                <option value="0-20lakh">Below ₹20 Lakhs</option>
+                                <option value="20lakh-50lakh">₹20 Lakhs - ₹50 Lakhs</option>
+                                <option value="50lakh-1cr">₹50 Lakhs - ₹1 Crore</option>
+                                <option value="1cr-2cr">₹1 Crore - ₹2 Crore</option>
+                                <option value="2cr+">Above ₹2 Crore</option>
                             </select>
                         </div>
                         
                         <div class="filter-group">
-                            <label>Max Budget</label>
-                            <select id="maxBudgetFilter">
-                                <option value="">No Max</option>
-                                <option value="20">20 Lakhs</option>
-                                <option value="30">30 Lakhs</option>
-                                <option value="50">50 Lakhs</option>
-                                <option value="75">75 Lakhs</option>
-                                <option value="1cr">1 Crore</option>
-                                <option value="2cr">2 Crore</option>
-                                <option value="5cr">5 Crore</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="filter-row">
-                        <div class="filter-group">
-                            <label>BHK</label>
-                            <select id="buyBhkFilter">
+                            <i class="fas fa-bed"></i>
+                            <select id="quickBhkFilter" class="filter-select">
                                 <option value="">All BHK</option>
                                 <option value="1rk">1 RK</option>
                                 <option value="1bhk">1 BHK</option>
@@ -126,54 +102,87 @@
                             </select>
                         </div>
                         
-                        <div class="filter-group">
-                            <label>Area (sq ft)</label>
-                            <select id="areaFilter">
-                                <option value="">Any Area</option>
-                                <option value="0-500">Below 500</option>
-                                <option value="500-1000">500-1000</option>
-                                <option value="1000-1500">1000-1500</option>
-                                <option value="1500-2000">1500-2000</option>
-                                <option value="2000-3000">2000-3000</option>
-                                <option value="3000+">Above 3000</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Posted By</label>
-                            <select id="postedByFilter">
-                                <option value="">All</option>
-                                <option value="owner">Owner</option>
-                                <option value="dealer">Dealer</option>
-                                <option value="builder">Builder</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-actions">
-                            <button class="btn-primary" onclick="applyBuyFilters()">
-                                <i class="fas fa-search"></i> Search
-                            </button>
-                            <button class="btn-secondary" onclick="resetBuyFilters()">
-                                <i class="fas fa-redo"></i> Reset
-                            </button>
-                        </div>
+                        <button class="btn-search" onclick="quickSearchBuy()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">1,245+</div>
+                        <div class="stat-label">Properties for Sale</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Localities</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Verified Listings</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Property Categories -->
+    <section class="property-categories">
+        <div class="container">
+            <h2 class="section-title">Browse by Category</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterByCategory('flat')">
+                    <div class="category-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Flats & Apartments</h3>
+                    <p>1RK, 1BHK, 2BHK, 3BHK+ flats</p>
+                    <span class="category-count">845 Properties</span>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('villa')">
+                    <div class="category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Independent Houses</h3>
+                    <p>Villas and independent houses</p>
+                    <span class="category-count">189 Properties</span>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('plot')">
+                    <div class="category-icon">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <h3>Plots & Land</h3>
+                    <p>Residential and commercial plots</p>
+                    <span class="category-count">156 Properties</span>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('commercial')">
+                    <div class="category-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Commercial Spaces</h3>
+                    <p>Office, retail, and industrial</p>
+                    <span class="category-count">67 Properties</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
     <!-- Properties Listing -->
     <section class="properties-listing">
         <div class="container">
             <div class="listing-header">
                 <div class="results-info">
                     <h2>Properties for Sale</h2>
-                    <p class="results-count">Showing <span id="resultsCount">12</span> properties</p>
+                    <p class="results-count">Showing <span id="buyResultsCount">12</span> properties</p>
                 </div>
                 <div class="sort-options">
                     <label>Sort by:</label>
-                    <select id="sortOptions" onchange="sortProperties()">
+                    <select id="buySortOptions" onchange="sortBuyProperties()">
                         <option value="relevance">Relevance</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -189,30 +198,64 @@
             </div>
             
             <div class="pagination">
-                <button class="pagination-btn" onclick="previousPage()">
+                <button class="pagination-btn" onclick="previousBuyPage()">
                     <i class="fas fa-chevron-left"></i> Previous
                 </button>
                 <div class="pagination-numbers">
-                    <span class="page-number active" onclick="goToPage(1)">1</span>
-                    <span class="page-number" onclick="goToPage(2)">2</span>
-                    <span class="page-number" onclick="goToPage(3)">3</span>
-                    <span class="page-number" onclick="goToPage(4)">4</span>
+                    <span class="page-number active" onclick="goToBuyPage(1)">1</span>
+                    <span class="page-number" onclick="goToBuyPage(2)">2</span>
+                    <span class="page-number" onclick="goToBuyPage(3)">3</span>
+                    <span class="page-number" onclick="goToBuyPage(4)">4</span>
                 </div>
-                <button class="pagination-btn" onclick="nextPage()">
+                <button class="pagination-btn" onclick="nextBuyPage()">
                     Next <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Featured Projects -->
-    <section class="featured-projects">
+    <!-- Buying Guide -->
+    <section class="buying-guide">
         <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <p class="section-subtitle">Premium new projects by reputed builders</p>
+            <h2 class="section-title">Buying Guide</h2>
+            <p class="section-subtitle">Everything you need to know about buying property in Indore</p>
             
-            <div class="projects-grid" id="projectsGrid">
-                <!-- Projects will be populated by JavaScript -->
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3>Legal Documentation</h3>
+                    <p>Understanding property documents, titles, and legal requirements for buying in Indore.</p>
+                    <a href="#" class="guide-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>EMI Calculator</h3>
+                    <p>Calculate monthly EMIs, down payment, and total interest for home loans.</p>
+                    <a href="#" class="guide-link">Calculate Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Verification Tips</h3>
+                    <p>Important verification tips and precautions while buying a property.</p>
+                    <a href="#" class="guide-link">Read Tips <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Investment Areas</h3>
+                    <p>Best localities for investment based on growth potential and ROI.</p>
+                    <a href="#" class="guide-link">Explore Areas <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </section>

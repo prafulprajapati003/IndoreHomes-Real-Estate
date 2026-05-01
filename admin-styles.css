@@ -715,45 +715,52 @@
 
 /* Image Upload */
 .image-upload-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    margin-top: 20px;
 }
 
 .upload-area {
-    border: 2px dashed #e5e7eb;
-    border-radius: 8px;
-    padding: 2rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 40px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: #f9fafb;
 }
 
 .upload-area:hover {
     border-color: #1e40af;
-    background: #f9fafb;
+    background: #eff6ff;
+}
+
+.upload-area.dragover {
+    border-color: #1e40af;
+    background: #eff6ff;
+    transform: scale(1.02);
 }
 
 .upload-content i {
     font-size: 3rem;
     color: #6b7280;
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
 }
 
 .upload-content p {
-    margin: 0 0 0.5rem 0;
-    color: #1f2937;
-    font-weight: 600;
+    font-size: 1.1rem;
+    color: #374151;
+    margin-bottom: 8px;
 }
 
 .upload-content small {
     color: #6b7280;
 }
 
-.uploaded-images {
+/* Image Preview Grid */
+.image-preview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
 }
 
 .uploaded-image {
@@ -1007,6 +1014,350 @@
 
 .success-message i {
     font-size: 1.25rem;
+}
+
+/* Testimonials Management */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.testimonial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.testimonial-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.testimonial-info h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.testimonial-info p {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.testimonial-rating {
+    display: flex;
+    gap: 4px;
+}
+
+.testimonial-rating i {
+    color: #fbbf24;
+    font-size: 0.9rem;
+}
+
+.testimonial-content {
+    margin-bottom: 20px;
+    color: #4b5563;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.testimonial-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Localities Management */
+.localities-table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 24px;
+}
+
+.badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.high {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge.low {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Rent Properties Management */
+.rent-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.rent-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rent-filters .filter-group label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.rent-filters .filter-group select {
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.rent-filters .filter-group select:focus {
+    outline: none;
+    border-color: #1e40af;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.rent-properties-table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 24px;
+}
+
+.property-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.property-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.property-info h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.property-info p {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.badge.available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.occupied {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge.maintenance {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-view {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-view:hover {
+    background: #2563eb;
+}
+
+.btn-edit {
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    background: #d97706;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+}
+
+.btn-manage {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-manage:hover {
+    background: #7c3aed;
+}
+
+/* Rent Property Details Modal */
+.rent-property-details {
+    padding: 20px 0;
+}
+
+.property-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.property-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.property-header .property-info {
+    flex: 1;
+}
+
+.property-header .property-info h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.property-header .property-info p {
+    color: #6b7280;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.property-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.detail-item span {
+    color: #1f2937;
+    font-weight: 500;
+}
+
+/* Form Row Layout */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .property-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .property-details-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Responsive Design */

@@ -1,8 +1,47 @@
-// Admin Login JavaScript
+// Unified Login JavaScript - Handles both User and Admin
 document.addEventListener('DOMContentLoaded', function() {
     initializeLoginForm();
+    initializeRoleSelection();
     checkExistingSession();
 });
+
+// Role Selection
+function initializeRoleSelection() {
+    const roleButtons = document.querySelectorAll('.role-btn');
+    const loginRoleInput = document.getElementById('loginRole');
+    
+    roleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            roleButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Update hidden input
+            const role = this.getAttribute('data-role');
+            if (loginRoleInput) {
+                loginRoleInput.value = role;
+            }
+            
+            // Update UI based on role
+            updateLoginUI(role);
+        });
+    });
+}
+
+function updateLoginUI(role) {
+    const loginTitle = document.querySelector('.login-title');
+    const loginSubtitle = document.querySelector('.login-subtitle');
+    
+    if (role === 'admin') {
+        if (loginTitle) loginTitle.textContent = 'Admin Login';
+        if (loginSubtitle) loginSubtitle.textContent = 'Access your property management dashboard';
+    } else {
+        if (loginTitle) loginTitle.textContent = 'User Login';
+        if (loginSubtitle) loginSubtitle.textContent = 'Access your account and saved properties';
+    }
+}
 
 function initializeLoginForm() {
     const loginForm = document.getElementById('loginForm');
@@ -61,10 +100,9 @@ function handleLogin(e) {
     
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
+    const role = document.getElementById('loginRole').value;
     const rememberMe = document.getElementById('rememberMe').checked;
     const loginButton = document.getElementById('loginButton');
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessage');
     
     // Hide previous messages
     hideMessages();
@@ -81,19 +119,23 @@ function handleLogin(e) {
     
     // Simulate authentication delay
     setTimeout(() => {
-        // Authenticate user
-        const isAuthenticated = authenticateUser(username, password);
+        // Authenticate based on role
+        const isAuthenticated = authenticateUser(username, password, role);
         
         if (isAuthenticated) {
             // Show success message
-            showSuccess('Login successful! Redirecting...');
+            showSuccess(`Login successful! Redirecting to ${role} dashboard...`);
             
             // Create session
-            createAdminSession(username, rememberMe);
+            createSession(username, role, rememberMe);
             
-            // Redirect to admin panel
+            // Redirect based on role
             setTimeout(() => {
-                window.location.href = 'admin.html';
+                if (role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
             }, 1500);
         } else {
             // Show error message
@@ -110,35 +152,48 @@ function handleLogin(e) {
     }, 1500);
 }
 
-function authenticateUser(username, password) {
-    // Default admin credentials (in production, this should be server-side)
-    const validCredentials = [
+function authenticateUser(username, password, role) {
+    // Admin credentials
+    const adminCredentials = [
         { username: 'admin', password: 'admin123' },
         { username: 'indorehomes', password: 'indore@2024' },
         { username: 'superadmin', password: 'super@123' }
     ];
     
-    return validCredentials.some(cred => cred.username === username && cred.password === password);
+    // User credentials (demo users)
+    const userCredentials = [
+        { username: 'user', password: 'user123' },
+        { username: 'rahul', password: 'rahul123' },
+        { username: 'priya', password: 'priya123' },
+        { username: 'amit', password: 'amit123' }
+    ];
+    
+    if (role === 'admin') {
+        return adminCredentials.some(cred => cred.username === username && cred.password === password);
+    } else {
+        return userCredentials.some(cred => cred.username === username && cred.password === password);
+    }
 }
 
-function createAdminSession(username, rememberMe) {
+function createSession(username, role, rememberMe) {
     const sessionData = {
         username: username,
+        role: role,
         loginTime: new Date().toISOString(),
         rememberMe: rememberMe,
         sessionTimeout: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 30 * 60 * 1000 // 7 days or 30 minutes
     };
     
     // Store session
-    localStorage.setItem('adminSession', JSON.stringify(sessionData));
+    localStorage.setItem('userSession', JSON.stringify(sessionData));
     
     // Set session cookie for additional security
     const expires = rememberMe ? '; expires=' + new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString() : '';
-    document.cookie = 'adminAuth=true' + expires + '; path=/; SameSite=Strict';
+    document.cookie = role + 'Auth=true' + expires + '; path=/; SameSite=Strict';
 }
 
 function checkExistingSession() {
-    const sessionData = localStorage.getItem('adminSession');
+    const sessionData = localStorage.getItem('userSession');
     
     if (sessionData) {
         try {
@@ -148,10 +203,15 @@ function checkExistingSession() {
             
             // Check if session is still valid
             if (currentTime - loginTime < session.sessionTimeout) {
-                // Session is valid, redirect to admin panel
+                // Session is valid, redirect based on role
+                const role = session.role || 'user';
                 showSuccess('Session found! Redirecting...');
                 setTimeout(() => {
-                    window.location.href = 'admin.html';
+                    if (role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
                 }, 1000);
             } else {
                 // Session expired, remove it
@@ -165,8 +225,9 @@ function checkExistingSession() {
 }
 
 function clearAdminSession() {
-    localStorage.removeItem('adminSession');
+    localStorage.removeItem('userSession');
     document.cookie = 'adminAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
 
 function handleForgotPassword(e) {
@@ -181,17 +242,27 @@ function handleForgotPassword(e) {
     }
     
     // Show password reset info (in production, this would send an email)
+    const role = document.getElementById('loginRole').value;
     const resetInfo = `
-        Password Reset Information:
-        
-        Username: ${username}
-        
-        For demo purposes, you can use these credentials:
-        - Username: admin, Password: admin123
-        - Username: indorehomes, Password: indore@2024
-        - Username: superadmin, Password: super@123
-        
-        In production, a password reset link would be sent to your registered email.
+Password Reset Information:
+
+Username: ${username}
+Role: ${role}
+
+For demo purposes, you can use these credentials:
+
+ADMIN ACCOUNTS:
+- Username: admin, Password: admin123
+- Username: indorehomes, Password: indore@2024
+- Username: superadmin, Password: super@123
+
+USER ACCOUNTS:
+- Username: user, Password: user123
+- Username: rahul, Password: rahul123
+- Username: priya, Password: priya123
+- Username: amit, Password: amit123
+
+In production, a password reset link would be sent to your registered email.
     `;
     
     alert(resetInfo);

@@ -911,7 +911,7 @@ function generateReport() {
 
 // Check if admin is logged in
 function checkAdminAuth() {
-    const sessionData = localStorage.getItem('adminSession');
+    const sessionData = localStorage.getItem('userSession');
     
     if (!sessionData && window.location.pathname.includes('admin.html')) {
         // Redirect to login page
@@ -925,11 +925,18 @@ function checkAdminAuth() {
             const currentTime = new Date().getTime();
             const loginTime = new Date(session.loginTime).getTime();
             
-            // Check if session is still valid
+            // Check if session is still valid and user is admin
             if (currentTime - loginTime >= session.sessionTimeout) {
                 // Session expired, redirect to login
                 clearAdminSession();
                 window.location.href = 'admin-login.html';
+                return false;
+            }
+            
+            // Check if user has admin role
+            if (session.role !== 'admin') {
+                // Not an admin, redirect to homepage
+                window.location.href = 'index.html';
                 return false;
             }
         } catch (error) {
@@ -944,9 +951,770 @@ function checkAdminAuth() {
 }
 
 function clearAdminSession() {
-    localStorage.removeItem('adminSession');
+    localStorage.removeItem('userSession');
     document.cookie = 'adminAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
+
+// Testimonial Management Functions
+function openTestimonialModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Testimonial</h2>
+                <button class="close-modal" onclick="closeModal(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="testimonialForm">
+                <div class="form-group">
+                    <label for="testimonialName">Name</label>
+                    <input type="text" id="testimonialName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="testimonialRole">Role</label>
+                    <input type="text" id="testimonialRole" name="role" placeholder="e.g., Verified Buyer, Seller">
+                </div>
+                <div class="form-group">
+                    <label for="testimonialContent">Testimonial</label>
+                    <textarea id="testimonialContent" name="content" required placeholder="Enter testimonial text..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="testimonialRating">Rating</label>
+                    <select id="testimonialRating" name="rating">
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="testimonialImage">Profile Image URL</label>
+                    <input type="url" id="testimonialImage" name="image" placeholder="https://picsum.photos/seed/user/50/50">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal(this)">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Testimonial</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    const form = document.getElementById('testimonialForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveTestimonial();
+    });
+}
+
+function editTestimonial(id) {
+    // Implementation for editing testimonial
+    showAdminSuccessMessage('Edit testimonial functionality coming soon!');
+}
+
+function deleteTestimonial(id) {
+    if (confirm('Are you sure you want to delete this testimonial?')) {
+        // Implementation for deleting testimonial
+        showAdminSuccessMessage('Testimonial deleted successfully!');
+    }
+}
+
+function saveTestimonial() {
+    // Implementation for saving testimonial
+    const form = document.getElementById('testimonialForm');
+    const formData = new FormData(form);
+    
+    // Save testimonial data
+    console.log('Saving testimonial:', Object.fromEntries(formData));
+    
+    showAdminSuccessMessage('Testimonial added successfully!');
+    closeModal(document.querySelector('.modal .close-modal'));
+}
+
+// Locality Management Functions
+function openLocalityModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Locality</h2>
+                <button class="close-modal" onclick="closeModal(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="localityForm">
+                <div class="form-group">
+                    <label for="localityName">Locality Name</label>
+                    <input type="text" id="localityName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="localityPrice">Average Price</label>
+                    <input type="text" id="localityPrice" name="price" placeholder="e.g., ₹85 Lakhs">
+                </div>
+                <div class="form-group">
+                    <label for="localityProperties">Properties Count</label>
+                    <input type="number" id="localityProperties" name="properties" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="localityDemand">Demand Level</label>
+                    <select id="localityDemand" name="demand">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="localityDescription">Description</label>
+                    <textarea id="localityDescription" name="description" placeholder="Enter locality description..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal(this)">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Locality</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    const form = document.getElementById('localityForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveLocality();
+    });
+}
+
+function editLocality(id) {
+    // Implementation for editing locality
+    showAdminSuccessMessage('Edit locality functionality coming soon!');
+}
+
+function deleteLocality(id) {
+    if (confirm('Are you sure you want to delete this locality?')) {
+        // Implementation for deleting locality
+        showAdminSuccessMessage('Locality deleted successfully!');
+    }
+}
+
+function saveLocality() {
+    // Implementation for saving locality
+    const form = document.getElementById('localityForm');
+    const formData = new FormData(form);
+    
+    // Save locality data
+    console.log('Saving locality:', Object.fromEntries(formData));
+    
+    showAdminSuccessMessage('Locality added successfully!');
+    closeModal(document.querySelector('.modal .close-modal'));
+}
+
+// Modal Helper Functions
+function closeModal(button) {
+    const modal = button.closest('.modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Image Upload Functionality
+let uploadedImages = [];
+let primaryImageIndex = 0;
+
+function initializeImageUpload() {
+    const uploadArea = document.getElementById('imageUploadArea');
+    const fileInput = document.getElementById('propertyImages');
+    const imagePreviewGrid = document.getElementById('imagePreviewGrid');
+    
+    if (!uploadArea || !fileInput || !imagePreviewGrid) return;
+    
+    // Click to upload
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+    
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+}
+
+function handleFiles(files) {
+    const validFiles = Array.from(files).filter(file => {
+        if (!file.type.startsWith('image/')) {
+            showAdminErrorMessage('Please upload only image files');
+            return false;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            showAdminErrorMessage('File size must be less than 5MB');
+            return false;
+        }
+        return true;
+    });
+    
+    validFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imageData = {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                url: e.target.result,
+                id: Date.now() + Math.random()
+            };
+            uploadedImages.push(imageData);
+            displayImagePreview(imageData);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function displayImagePreview(imageData) {
+    const imagePreviewGrid = document.getElementById('imagePreviewGrid');
+    if (!imagePreviewGrid) return;
+    
+    const previewItem = document.createElement('div');
+    previewItem.className = 'image-preview-item';
+    previewItem.dataset.imageId = imageData.id;
+    
+    previewItem.innerHTML = `
+        <img src="${imageData.url}" alt="${imageData.name}">
+        <div class="image-info">
+            ${formatFileSize(imageData.size)}
+        </div>
+        <div class="image-preview-overlay">
+            <div class="image-preview-actions">
+                <button class="btn-set-primary" onclick="setPrimaryImage(${imageData.id})">
+                    <i class="fas fa-star"></i> Primary
+                </button>
+                <button class="btn-remove-image" onclick="removeImage(${imageData.id})">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+    `;
+    
+    imagePreviewGrid.appendChild(previewItem);
+    
+    // Set first image as primary by default
+    if (uploadedImages.length === 1) {
+        setPrimaryImage(imageData.id);
+    }
+}
+
+function setPrimaryImage(imageId) {
+    // Remove all primary badges
+    document.querySelectorAll('.primary-badge').forEach(badge => badge.remove());
+    
+    // Add primary badge to selected image
+    const imageItem = document.querySelector(`[data-image-id="${imageId}"]`);
+    if (imageItem) {
+        const badge = document.createElement('div');
+        badge.className = 'primary-badge';
+        badge.innerHTML = '<i class="fas fa-star"></i> Primary';
+        imageItem.appendChild(badge);
+        
+        primaryImageIndex = uploadedImages.findIndex(img => img.id === imageId);
+    }
+}
+
+function removeImage(imageId) {
+    if (confirm('Are you sure you want to remove this image?')) {
+        uploadedImages = uploadedImages.filter(img => img.id !== imageId);
+        
+        const imageItem = document.querySelector(`[data-image-id="${imageId}"]`);
+        if (imageItem) {
+            imageItem.remove();
+        }
+        
+        // If removed image was primary, set new primary
+        if (uploadedImages.length > 0 && primaryImageIndex >= uploadedImages.length) {
+            primaryImageIndex = 0;
+            if (uploadedImages[0]) {
+                setPrimaryImage(uploadedImages[0].id);
+            }
+        }
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function getUploadedImagesData() {
+    return uploadedImages.map(img => ({
+        ...img,
+        isPrimary: uploadedImages.indexOf(img) === primaryImageIndex
+    }));
+}
+
+// Initialize image upload when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeImageUpload();
+});
+
+// Rent Properties Management Functions
+let rentProperties = [
+    {
+        id: 1,
+        title: "2BHK Luxury Apartment",
+        type: "flat",
+        location: "vijay-nagar",
+        address: "Scheme 54, Vijay Nagar",
+        monthlyRent: 18000,
+        deposit: 36000,
+        status: "available",
+        tenant: null,
+        leaseEnd: null,
+        image: "https://picsum.photos/seed/rent1/60/60"
+    },
+    {
+        id: 2,
+        title: "3BHK Premium Villa",
+        type: "villa",
+        location: "super-corridor",
+        address: "Super Corridor",
+        monthlyRent: 35000,
+        deposit: 70000,
+        status: "occupied",
+        tenant: "Rahul Sharma",
+        leaseEnd: "2024-12-31",
+        image: "https://picsum.photos/seed/rent2/60/60"
+    },
+    {
+        id: 3,
+        title: "1BHK PG for Boys",
+        type: "pg",
+        location: "palasia",
+        address: "Near Palasia Square",
+        monthlyRent: 8000,
+        deposit: 16000,
+        status: "available",
+        tenant: null,
+        leaseEnd: null,
+        image: "https://picsum.photos/seed/rent3/60/60"
+    }
+];
+
+function openAddRentPropertyModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Rent Property</h2>
+                <button class="close-modal" onclick="closeModal(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addRentPropertyForm">
+                <div class="form-group">
+                    <label for="rentPropertyTitle">Property Title *</label>
+                    <input type="text" id="rentPropertyTitle" name="title" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rentPropertyType">Property Type *</label>
+                        <select id="rentPropertyType" name="type" required>
+                            <option value="">Select Type</option>
+                            <option value="flat">Flat</option>
+                            <option value="villa">Villa</option>
+                            <option value="pg">PG</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rentPropertyLocation">Location *</label>
+                        <select id="rentPropertyLocation" name="location" required>
+                            <option value="">Select Location</option>
+                            <option value="vijay-nagar">Vijay Nagar</option>
+                            <option value="super-corridor">Super Corridor</option>
+                            <option value="rau">Rau</option>
+                            <option value="nipania">Nipania</option>
+                            <option value="palasia">Palasia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rentPropertyAddress">Address *</label>
+                    <input type="text" id="rentPropertyAddress" name="address" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monthlyRent">Monthly Rent (₹) *</label>
+                        <input type="number" id="monthlyRent" name="monthlyRent" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depositAmount">Security Deposit (₹) *</label>
+                        <input type="number" id="depositAmount" name="deposit" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyStatus">Status</label>
+                    <select id="propertyStatus" name="status">
+                        <option value="available">Available</option>
+                        <option value="occupied">Occupied</option>
+                        <option value="maintenance">Under Maintenance</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="tenantInfoGroup" style="display: none;">
+                    <label for="tenantName">Tenant Name</label>
+                    <input type="text" id="tenantName" name="tenantName">
+                    
+                    <label for="leaseEndDate">Lease End Date</label>
+                    <input type="date" id="leaseEndDate" name="leaseEndDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyDescription">Description</label>
+                    <textarea id="propertyDescription" name="description" rows="4" placeholder="Describe the rental property..."></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal(this)">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Property</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle status change to show/hide tenant info
+    const statusSelect = document.getElementById('propertyStatus');
+    const tenantInfoGroup = document.getElementById('tenantInfoGroup');
+    
+    statusSelect.addEventListener('change', function() {
+        tenantInfoGroup.style.display = this.value === 'occupied' ? 'block' : 'none';
+    });
+    
+    // Handle form submission
+    const form = document.getElementById('addRentPropertyForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveRentProperty();
+    });
+}
+
+function saveRentProperty() {
+    const form = document.getElementById('addRentPropertyForm');
+    const formData = new FormData(form);
+    
+    const newRentProperty = {
+        id: Date.now(),
+        title: formData.get('title'),
+        type: formData.get('type'),
+        location: formData.get('location'),
+        address: formData.get('address'),
+        monthlyRent: parseInt(formData.get('monthlyRent')),
+        deposit: parseInt(formData.get('deposit')),
+        status: formData.get('status'),
+        tenant: formData.get('status') === 'occupied' ? formData.get('tenantName') : null,
+        leaseEnd: formData.get('status') === 'occupied' ? formData.get('leaseEndDate') : null,
+        image: `https://picsum.photos/seed/rent${Date.now()}/60/60`
+    };
+    
+    rentProperties.push(newRentProperty);
+    updateRentPropertiesTable();
+    
+    showAdminSuccessMessage('Rent property added successfully!');
+    closeModal(document.querySelector('.modal .close-modal'));
+}
+
+function viewRentProperty(id) {
+    const property = rentProperties.find(p => p.id === id);
+    if (!property) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rent Property Details</h2>
+                <button class="close-modal" onclick="closeModal(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="rent-property-details">
+                <div class="property-header">
+                    <img src="${property.image}" alt="${property.title}" class="property-image">
+                    <div class="property-info">
+                        <h3>${property.title}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${property.address}</p>
+                        <span class="badge ${property.status}">${property.status}</span>
+                    </div>
+                </div>
+                
+                <div class="property-details-grid">
+                    <div class="detail-item">
+                        <label>Property Type:</label>
+                        <span>${property.type.charAt(0).toUpperCase() + property.type.slice(1)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Monthly Rent:</label>
+                        <span>₹${property.monthlyRent.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Security Deposit:</label>
+                        <span>₹${property.deposit.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Location:</label>
+                        <span>${property.location.replace('-', ' ').charAt(0).toUpperCase() + property.location.replace('-', ' ').slice(1)}</span>
+                    </div>
+                    ${property.tenant ? `
+                        <div class="detail-item">
+                            <label>Current Tenant:</label>
+                            <span>${property.tenant}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Lease End Date:</label>
+                            <span>${property.leaseEnd}</span>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+function editRentProperty(id) {
+    const property = rentProperties.find(p => p.id === id);
+    if (!property) return;
+    
+    showAdminSuccessMessage('Edit rent property functionality coming soon!');
+}
+
+function deleteRentProperty(id) {
+    if (confirm('Are you sure you want to delete this rent property?')) {
+        rentProperties = rentProperties.filter(p => p.id !== id);
+        updateRentPropertiesTable();
+        showAdminSuccessMessage('Rent property deleted successfully!');
+    }
+}
+
+function manageTenant(id) {
+    const property = rentProperties.find(p => p.id === id);
+    if (!property) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Tenant</h2>
+                <button class="close-modal" onclick="closeModal(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="manageTenantForm">
+                <div class="form-group">
+                    <label for="tenantName">Tenant Name *</label>
+                    <input type="text" id="tenantName" name="tenantName" value="${property.tenant || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tenantPhone">Phone Number</label>
+                    <input type="tel" id="tenantPhone" name="tenantPhone" placeholder="+91 98765 43210">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tenantEmail">Email</label>
+                    <input type="email" id="tenantEmail" name="tenantEmail" placeholder="tenant@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="leaseStartDate">Lease Start Date</label>
+                    <input type="date" id="leaseStartDate" name="leaseStartDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="leaseEndDate">Lease End Date *</label>
+                    <input type="date" id="leaseEndDate" name="leaseEndDate" value="${property.leaseEnd || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="monthlyRent">Monthly Rent (₹) *</label>
+                    <input type="number" id="monthlyRent" name="monthlyRent" value="${property.monthlyRent}" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="depositAmount">Security Deposit (₹) *</label>
+                    <input type="number" id="depositAmount" name="deposit" value="${property.deposit}" min="0" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal(this)">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Tenant</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    const form = document.getElementById('manageTenantForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        updateTenantInfo(id);
+    });
+}
+
+function updateTenantInfo(propertyId) {
+    const form = document.getElementById('manageTenantForm');
+    const formData = new FormData(form);
+    
+    const propertyIndex = rentProperties.findIndex(p => p.id === propertyId);
+    if (propertyIndex !== -1) {
+        rentProperties[propertyIndex] = {
+            ...rentProperties[propertyIndex],
+            tenant: formData.get('tenantName'),
+            leaseEnd: formData.get('leaseEndDate'),
+            monthlyRent: parseInt(formData.get('monthlyRent')),
+            deposit: parseInt(formData.get('deposit')),
+            status: 'occupied'
+        };
+        
+        updateRentPropertiesTable();
+        showAdminSuccessMessage('Tenant information updated successfully!');
+        closeModal(document.querySelector('.modal .close-modal'));
+    }
+}
+
+function filterRentProperties() {
+    const location = document.getElementById('rentLocationFilter').value;
+    const type = document.getElementById('rentTypeFilter').value;
+    const price = document.getElementById('rentPriceFilter').value;
+    const status = document.getElementById('rentStatusFilter').value;
+    
+    let filteredProperties = rentProperties;
+    
+    if (location) {
+        filteredProperties = filteredProperties.filter(p => p.location === location);
+    }
+    
+    if (type) {
+        filteredProperties = filteredProperties.filter(p => p.type === type);
+    }
+    
+    if (price) {
+        const [min, max] = price.split('-').map(p => p.replace('k', '000').replace('+', ''));
+        filteredProperties = filteredProperties.filter(p => {
+            if (max) {
+                return p.monthlyRent >= parseInt(min) && p.monthlyRent <= parseInt(max);
+            } else {
+                return p.monthlyRent >= parseInt(min);
+            }
+        });
+    }
+    
+    if (status) {
+        filteredProperties = filteredProperties.filter(p => p.status === status);
+    }
+    
+    updateRentPropertiesTable(filteredProperties);
+}
+
+function updateRentPropertiesTable(properties = rentProperties) {
+    const tbody = document.getElementById('rentPropertiesTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = properties.map(property => `
+        <tr>
+            <td>
+                <div class="property-info">
+                    <img src="${property.image}" alt="${property.title}" class="property-thumb">
+                    <div>
+                        <h4>${property.title}</h4>
+                        <p>${property.address}</p>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge">${property.type.charAt(0).toUpperCase() + property.type.slice(1)}</span></td>
+            <td>${property.location.replace('-', ' ').charAt(0).toUpperCase() + property.location.replace('-', ' ').slice(1)}</td>
+            <td>₹${property.monthlyRent.toLocaleString('en-IN')}</td>
+            <td>₹${property.deposit.toLocaleString('en-IN')}</td>
+            <td><span class="badge ${property.status}">${property.status}</span></td>
+            <td>${property.tenant || '-'}</td>
+            <td>${property.leaseEnd || '-'}</td>
+            <td>
+                <div class="table-actions">
+                    <button class="btn-view" onclick="viewRentProperty(${property.id})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-edit" onclick="editRentProperty(${property.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    ${property.status === 'occupied' ? `
+                        <button class="btn-manage" onclick="manageTenant(${property.id})">
+                            <i class="fas fa-user"></i>
+                        </button>
+                    ` : `
+                        <button class="btn-delete" onclick="deleteRentProperty(${property.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function exportRentProperties() {
+    const dataStr = JSON.stringify(rentProperties, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `rent_properties_${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+    
+    showAdminSuccessMessage('Rent properties exported successfully!');
+}
+
+// Initialize rent properties table when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    updateRentPropertiesTable();
+});
 
 // Initialize auth check
 if (!checkAdminAuth()) {

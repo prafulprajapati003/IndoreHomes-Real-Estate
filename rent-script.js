@@ -289,7 +289,68 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     renderRentProperties();
     initializeScrollEffects();
+    initializeQuickSearch();
 });
+
+// Quick search functionality
+function initializeQuickSearch() {
+    // Add event listeners to quick search filters
+    const quickFilters = ['quickLocationFilter', 'quickTypeFilter', 'quickBudgetFilter', 'quickBhkFilter'];
+    quickFilters.forEach(filterId => {
+        const filter = document.getElementById(filterId);
+        if (filter) {
+            filter.addEventListener('change', function() {
+                // Auto-apply filters when changed
+                quickSearchRentals();
+            });
+        }
+    });
+}
+
+function quickSearchRentals() {
+    const location = document.getElementById('quickLocationFilter').value;
+    const type = document.getElementById('quickTypeFilter').value;
+    const budget = document.getElementById('quickBudgetFilter').value;
+    const bhk = document.getElementById('quickBhkFilter').value;
+    
+    // Apply filters to advanced search form
+    if (location) {
+        document.getElementById('rentLocationFilter').value = location;
+    }
+    if (type) {
+        document.getElementById('rentPropertyTypeFilter').value = type;
+    }
+    if (budget) {
+        // Convert budget range to min/max values
+        const budgetRanges = {
+            '0-10k': { min: '', max: '10000' },
+            '10k-20k': { min: '10000', max: '20000' },
+            '20k-35k': { min: '20000', max: '35000' },
+            '35k-50k': { min: '35000', max: '50000' },
+            '50k+': { min: '50000', max: '' }
+        };
+        
+        const range = budgetRanges[budget];
+        if (range) {
+            document.getElementById('minRentFilter').value = range.min;
+            document.getElementById('maxRentFilter').value = range.max;
+        }
+    }
+    if (bhk) {
+        document.getElementById('rentBhkFilter').value = bhk;
+    }
+    
+    // Apply filters and scroll to results
+    applyRentFilters();
+    
+    // Scroll to properties section
+    const propertiesSection = document.querySelector('.properties-listing');
+    if (propertiesSection) {
+        propertiesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    showSuccessMessage('Search applied successfully!');
+}
 
 // Navigation functionality (same as homepage)
 function initializeNavigation() {
